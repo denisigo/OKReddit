@@ -1,0 +1,96 @@
+<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:layout_margin="8dp"
+            android:background="@android:drawable/dialog_holo_light_frame">
+
+            <TextView
+                android:id="@+id/tvSubredditName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#666666"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:layout_marginBottom="4dp"/>
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp" />
+
+            <ImageView
+                android:id="@+id/thumbnail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ffcccc"
+                android:layout_marginBottom="8dp"/>
+            <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal|center_vertical"
+                android:layout_marginBottom="8dp">
+                <ImageView
+                    android:layout_height="14dp"
+                    android:layout_width="14dp"
+                    android:src="@drawable/ic_link"/>
+                <TextView
+                    android:id="@+id/url"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="sdfsdf"
+                    android:textColor="#258fb6"
+                    android:layout_marginLeft="4dp"
+                    android:ellipsize="end"
+                    android:singleLine="true"/>
+                </LinearLayout>
+
+            <TextView
+                android:id="@+id/postInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_marginBottom="8dp"
+                android:textColor="#888888"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_gravity="center_horizontal">
+
+                <ImageButton
+                    android:layout_height="48dp"
+                    android:layout_width="48dp"
+                    android:src="@drawable/action_upvote"
+                    android:textStyle="bold"
+                    android:scaleType="centerInside"/>
+                <TextView
+                    android:id="@+id/score"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="+1234"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:textColor="#444444"/>
+                <ImageButton
+                    android:layout_height="48dp"
+                    android:layout_width="48dp"
+                    android:src="@drawable/action_downvote"
+                    android:textStyle="bold"
+                    android:scaleType="centerInside"/>
+                </LinearLayout>
+
+
+        </LinearLayout>
+
+</ScrollView>

@@ -1,23 +1,26 @@
 package com.denisigo.okreddit;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.denisigo.okreddit.sync.OKRedditSyncAdapter;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends FragmentActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new MainFragment())
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, new ViewFragment())
                     .commit();
         }
+
+        //OKRedditSyncAdapter.initializeSyncAdapter(this);
     }
 
 
@@ -35,6 +38,7 @@ public class MainActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            OKRedditSyncAdapter.syncImmediately(getApplicationContext());
             return true;
         }
         return super.onOptionsItemSelected(item);

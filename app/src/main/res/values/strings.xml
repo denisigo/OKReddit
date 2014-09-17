@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="http://schemas.android.com/apk/res-auto">
 
     <string name="app_name">OK Reddit</string>
     <string name="hello_world">Hello world!</string>
@@ -8,5 +8,12 @@
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in</string>
     <string name="title_activity_login">Login</string>
+
+    <!-- SyncAdapter related -->
+    <string name="sync_account_type">okreddit.denisigo.com</string>
+    <string name="content_authority">"com.denisigo.okreddit"</string>
+    <string name="title_activity_web_view">WebViewActivity</string>
+
+    <string name="format_post_info">Posted <xliff:g id="datetime">%1$s</xliff:g> by <xliff:g id="author">%2$s</xliff:g></string>
 
 </resources>
