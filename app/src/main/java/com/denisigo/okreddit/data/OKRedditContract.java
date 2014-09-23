@@ -19,6 +19,7 @@ public class OKRedditContract {
 
     public static final String PATH_SUBREDDITS = "subreddits";
     public static final String PATH_POSTS = "posts";
+    public static final String PATH_SYNCSTATE = "syncstate";
 
     public static final String DATE_FORMAT = "yyyyMMdd";
 
@@ -76,7 +77,7 @@ public class OKRedditContract {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-        public static Uri buildSubredditPostsUri(String subredditId) {
+        public static Uri buildSubredditPostsUri1(String subredditId) {
             return CONTENT_URI.buildUpon().appendPath(subredditId).appendPath("posts").build();
         }
         public static Uri buildSubredditPostsUri(String subredditId, int offset, int limit) {
@@ -84,6 +85,11 @@ public class OKRedditContract {
                     appendPath("posts").
                     appendQueryParameter("offset", Integer.toString(offset)).
                     appendQueryParameter("limit", Integer.toString(limit)).
+                    build();
+        }
+        public static Uri buildSubredditPostsUri(String subredditId) {
+            return CONTENT_URI.buildUpon().appendPath(subredditId).
+                    appendPath("posts").
                     build();
         }
 
@@ -138,11 +144,40 @@ public class OKRedditContract {
         public static final String COLUMN_NUM_COMMENTS = "num_comments";
         public static final String COLUMN_VISITED = "visited";
         public static final String COLUMN_ORDER = "_order";
+        public static final String COLUMN_VOTED = "voted";
 
         public static Uri buildPostUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
+        public static Uri buildVotePostUri(String postId, String direction) {
+            return CONTENT_URI.buildUpon().appendPath(postId).
+                    appendPath("vote").
+                    appendQueryParameter("direction", direction).
+                    build();
+        }
+        public static String getPostIdFromUri(Uri uri){
+            return uri.getPathSegments().get(1);
+        }
+        public static String getDirectionFromUri(Uri uri){
+            return uri.getQueryParameter("direction");
+        }
+    }
 
+
+    public static final class SyncstateEntry implements BaseColumns {
+
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_SYNCSTATE).build();
+
+        public static final String CONTENT_TYPE =
+                "vnd.android.cursor.dir/" + CONTENT_AUTHORITY + "/" + PATH_SYNCSTATE;
+        public static final String CONTENT_ITEM_TYPE =
+                "vnd.android.cursor.item/" + CONTENT_AUTHORITY + "/" + PATH_SYNCSTATE;
+
+        public static final String TABLE_NAME = "syncstate";
+
+        public static final String COLUMN_TYPE = "type";
+        public static final String COLUMN_STATE = "state";
     }
 }

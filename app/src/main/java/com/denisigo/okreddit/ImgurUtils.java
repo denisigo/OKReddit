@@ -72,7 +72,7 @@ public class ImgurUtils {
             thumbUrl = filename + "." + extension;
         } else {
             // If it is not an album
-            if (!url.contains("/a/")) {
+            if (!url.contains("/a/") && !url.contains("/gallery/")) {
                 // URLs without extension lead to main site, so add `i.` to lead to image
                 url = url.replace("imgur.com", "i.imgur.com");
                 // We add some extension because we don't know what extension file has actually

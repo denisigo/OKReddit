@@ -3,13 +3,13 @@ package redditapi;
 import java.util.List;
 
 public class Listing<T>{
-    String kind;
-    ListingData<T> data;
+    public String kind;
+    public ListingData<T> data;
 
     public static class ListingData<T>{
-        String modhash;
-        String before;
-        String after;
-        List<T> children;
+        public String modhash;
+        public String before;
+        public String after;
+        public List<T> children;
     }
 }

@@ -2,11 +2,7 @@
 <resources xmlns:xliff="http://schemas.android.com/apk/res-auto">
 
     <string name="app_name">OK Reddit</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="prompt_login">Login</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in</string>
     <string name="title_activity_login">Login</string>
 
     <!-- SyncAdapter related -->
@@ -14,6 +10,27 @@
     <string name="content_authority">"com.denisigo.okreddit"</string>
     <string name="title_activity_web_view">WebViewActivity</string>
 
+    <string name="fileprovider_authority">com.denisigo.okreddit.fileprovider</string>
+
+
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="drawer_open">Open navigation drawer</string>
+
+    <string name="prompt_username">Username</string>
+    <string name="prompt_password">Password</string>
+    <string name="log_in">Log in</string>
+    <string name="login_failed">Login failed</string>
+    <string name="format_user_greeting">Hi, %s!</string>
+
+
     <string name="format_post_info">Posted <xliff:g id="datetime">%1$s</xliff:g> by <xliff:g id="author">%2$s</xliff:g></string>
+    <string name="action_refresh">Refresh</string>
+    <string name="title_activity_subreddits">Manage subreddits</string>
+    <string name="offline_unable_manage_subreddits">You\'re offline. Unable to manage subreddits.</string>
+    <string name="offline_unable_sync">You\'re offline. Unable to sync.</string>
+    <string name="action_share">Share</string>
+    <string name="offline_unable_vote">You\'re offline. Unable to vote.</string>
+    <string name="notloggedin_unable_vote">You\'re not logged in. Unable to vote.</string>
+    <string name="offline_unable_viewurl">You\'re offline. Unable to view full url.</string>
 
 </resources>

@@ -5,24 +5,14 @@ import android.accounts.AccountManager;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.SyncRequest;
 import android.content.SyncResult;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 
+import com.denisigo.okreddit.AuthUtils;
 import com.denisigo.okreddit.R;
-import com.denisigo.okreddit.data.OKRedditContract.SubredditEntry;
-import com.denisigo.okreddit.data.OKRedditContract.PostEntry;
-
-import java.util.List;
-import java.util.Vector;
-
-import redditapi.Post;
-import redditapi.RedditAPI;
-import redditapi.Subreddit;
 
 public class OKRedditSyncAdapter extends AbstractThreadedSyncAdapter {
     private static final long DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
@@ -33,108 +23,29 @@ public class OKRedditSyncAdapter extends AbstractThreadedSyncAdapter {
     public static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
 
     private final Context mContext;
+    private Syncer mSyncer;
 
     public OKRedditSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
-        Log.d(LOG_TAG, "Creating SyncAdapter");
         mContext = context;
+        mSyncer = new Syncer(context);
     }
 
     @Override
     public void onPerformSync(Account account, Bundle bundle, String authority,
                               ContentProviderClient provider, SyncResult syncResult) {
-        Log.d(LOG_TAG, "Starting sync");
-
-
-        RedditAPI api = new RedditAPI();
-
-        api.login("denisigo", "x0Qs*%y$Uv", true);
-
-        List<Subreddit> subreddits = api.mineSubreddits();
-
-        Log.i(LOG_TAG, subreddits.get(0).getDisplayName());
-
-        Vector<ContentValues> cVVector = new Vector<ContentValues>(subreddits.size());
-
-        for (Subreddit subreddit : subreddits) {
-            ContentValues weatherValues = new ContentValues();
-
-            weatherValues.put(SubredditEntry.COLUMN_SUBREDDIT_ID, subreddit.getId());
-            weatherValues.put(SubredditEntry.COLUMN_DISPLAY_NAME, subreddit.getDisplayName());
-            weatherValues.put(SubredditEntry.COLUMN_HEADER_IMG, subreddit.getHeaderImg());
-            weatherValues.put(SubredditEntry.COLUMN_TITLE, subreddit.getTitle());
-            weatherValues.put(SubredditEntry.COLUMN_SUBSCRIBERS, subreddit.getSubscribers());
-            weatherValues.put(SubredditEntry.COLUMN_URL, subreddit.getUrl());
-            weatherValues.put(SubredditEntry.COLUMN_PUBLIC_DESCRIPTION, subreddit.getPublicDescription());
-            weatherValues.put(SubredditEntry.COLUMN_USER_IS_SUBSCRIBER, subreddit.isUserSubscriber());
-            weatherValues.put(SubredditEntry.COLUMN_USER_IS_MODERATOR, subreddit.isUserModerator());
-            weatherValues.put(SubredditEntry.COLUMN_USER_IS_BANNED, subreddit.isUserBanned());
-            weatherValues.put(SubredditEntry.COLUMN_ORDER, System.currentTimeMillis());
-
-            cVVector.add(weatherValues);
+        mSyncer.setSyncState(Syncer.SYNC_STATE_RUNNING);
+        // Do full syncing
+        try {
+            // Sync subreddits only if we're logged in
+            if (AuthUtils.isLoggedIn(getContext()))
+                mSyncer.syncSubreddits();
+            mSyncer.syncPosts();
+        }finally {
+            mSyncer.setSyncState(Syncer.SYNC_STATE_STOPPED);
         }
-
-
-        if ( cVVector.size() > 0 ) {
-            ContentValues[] cvArray = new ContentValues[cVVector.size()];
-            cVVector.toArray(cvArray);
-            Log.i(LOG_TAG, Integer.toString(mContext.getContentResolver().bulkInsert(SubredditEntry.CONTENT_URI, cvArray)));
-        }
-
-
-        List<Post> posts = api.posts();
-
-        Log.i(LOG_TAG, posts.get(0).getUrl());
-
-        cVVector.clear();
-
-        for (Post post : posts) {
-            ContentValues weatherValues = new ContentValues();
-
-            String subredditId = post.getSubredditId().split("_")[1];
-
-            weatherValues.put(PostEntry.COLUMN_DOMAIN, post.getDomain());
-            weatherValues.put(PostEntry.COLUMN_SUBREDDIT, post.getSubreddit());
-            weatherValues.put(PostEntry.COLUMN_SELFTEXT_HTML, post.getSelftextHtml());
-            weatherValues.put(PostEntry.COLUMN_SELFTEXT, post.getSelftext());
-            weatherValues.put(PostEntry.COLUMN_POST_ID, post.getId());
-            weatherValues.put(PostEntry.COLUMN_GILDED, post.getGilded());
-            weatherValues.put(PostEntry.COLUMN_CLICKED, post.isClicked());
-            weatherValues.put(PostEntry.COLUMN_AUTHOR, post.getAuthor());
-            weatherValues.put(PostEntry.COLUMN_SCORE, post.getScore());
-            weatherValues.put(PostEntry.COLUMN_OVER_18, post.isOver18());
-            weatherValues.put(PostEntry.COLUMN_HIDDEN, post.isHidden());
-            weatherValues.put(PostEntry.COLUMN_THUMBNAIL, post.getThumbnail());
-            weatherValues.put(PostEntry.COLUMN_SUBREDDIT_ID, subredditId);
-            weatherValues.put(PostEntry.COLUMN_EDITED, post.isEdited());
-            weatherValues.put(PostEntry.COLUMN_DOWNS, post.getDowns());
-            weatherValues.put(PostEntry.COLUMN_SAVED, post.isSaved());
-            weatherValues.put(PostEntry.COLUMN_IS_SELF, post.isSelf());
-            weatherValues.put(PostEntry.COLUMN_NAME, post.getName());
-            weatherValues.put(PostEntry.COLUMN_PERMALINK, post.getPermalink());
-            weatherValues.put(PostEntry.COLUMN_STICKED, post.isSticked());
-            weatherValues.put(PostEntry.COLUMN_CREATED, post.getCreated());
-            weatherValues.put(PostEntry.COLUMN_URL, post.getUrl());
-            weatherValues.put(PostEntry.COLUMN_TITLE, post.getTitle());
-            weatherValues.put(PostEntry.COLUMN_CREATED_UTC, post.getCreatedUtc());
-            weatherValues.put(PostEntry.COLUMN_UPS, post.getUps());
-            weatherValues.put(PostEntry.COLUMN_NUM_COMMENTS, post.getNumComments());
-            weatherValues.put(PostEntry.COLUMN_VISITED, post.isVisited());
-
-            weatherValues.put(PostEntry.COLUMN_ORDER, System.currentTimeMillis());
-
-            cVVector.add(weatherValues);
-        }
-
-
-        if ( cVVector.size() > 0 ) {
-            ContentValues[] cvArray = new ContentValues[cVVector.size()];
-            cVVector.toArray(cvArray);
-            Log.i(LOG_TAG, "Posts: " + Integer.toString(mContext.getContentResolver().bulkInsert(PostEntry.CONTENT_URI, cvArray)));
-        }
-
-        return;
     }
+
 
     /**
      * Helper method to have the sync adapter sync immediately

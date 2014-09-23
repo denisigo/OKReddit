@@ -1,16 +1,16 @@
 package redditapi;
 
 public class Subreddit{
-    private String id;
-    private String display_name;
-    private String header_img;
-    private String title;
-    private int subscribers;
-    private String url;
-    private String public_description;
-    private boolean user_is_subscriber;
-    private boolean user_is_moderator;
-    private boolean user_is_banned;
+    public String id;
+    public String display_name;
+    public String header_img;
+    public String title;
+    public int subscribers;
+    public String url;
+    public String public_description;
+    public boolean user_is_subscriber;
+    public boolean user_is_moderator;
+    public boolean user_is_banned;
 
     public String getId() {
         return id;

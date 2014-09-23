@@ -3,6 +3,8 @@
     package="com.denisigo.okreddit" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <!-- Permissions required by the sync adapter -->
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
@@ -24,17 +26,46 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".SubredditsActivity"
+            android:label="@string/title_activity_subreddits">
+        </activity>
+        <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login"
-            android:theme="@android:style/Theme.Holo.Dialog"
+            android:theme="@android:style/Theme.Holo.Light.Dialog"
             android:windowSoftInputMode="adjustResize|stateHidden" >
         </activity>
+        <activity
+            android:name=".WebViewActivity"
+            android:label="@string/title_activity_web_view" >
+        </activity>
+
+
+        <service android:name=".service.LoadMorePostsService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <service android:name=".service.InitAppService"
+            android:enabled="true"
+            android:exported="false" />
+
 
         <provider
             android:name=".data.OKRedditProvider"
             android:authorities="@string/content_authority"
             android:exported="false"
             android:syncable="true" />
+
+        <!-- File provider for sharing post thumbnails -->
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="@string/fileprovider_authority"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/share_paths" />
+        </provider>
 
         <!-- SyncAdapter's dummy authentication service -->
         <service android:name=".sync.OKRedditAuthenticatorService" >
@@ -59,11 +90,6 @@
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter" />
         </service>
-
-        <activity
-            android:name=".WebViewActivity"
-            android:label="@string/title_activity_web_view" >
-        </activity>
     </application>
 
 </manifest>

@@ -1,14 +1,13 @@
 package com.denisigo.okreddit;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 
+import com.denisigo.okreddit.service.InitAppService;
 import com.denisigo.okreddit.sync.OKRedditSyncAdapter;
 
 
-public class MainActivity extends FragmentActivity{
+public class MainActivity extends BaseActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,27 +19,18 @@ public class MainActivity extends FragmentActivity{
                     .commit();
         }
 
-        //OKRedditSyncAdapter.initializeSyncAdapter(this);
-    }
+        createNavigationDrawer();
+        initNavigationDrawer();
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            OKRedditSyncAdapter.syncImmediately(getApplicationContext());
-            return true;
+        // Launch initialization process if we're first time launching
+        if (Utils.isFirstLaunch(this)) {
+            startService(new Intent(this, InitAppService.class));
+            Utils.setFirstLaunch(this, false);
         }
-        return super.onOptionsItemSelected(item);
+
+        // Every 3 hours perform full update.
+        OKRedditSyncAdapter.initializeSyncAdapter(this);
     }
+
+
 }

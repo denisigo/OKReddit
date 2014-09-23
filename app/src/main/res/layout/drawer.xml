@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/userPanel"
+        android:layout_height="100dp"
+        android:layout_width="match_parent"
+        android:paddingRight="15dp"
+        android:paddingLeft="25dp"
+        android:paddingTop="25dp"
+        android:paddingBottom="25dp"
+        android:background="#368fbd">
+
+        <TextView
+            android:id="@+id/username"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:textSize="18sp"/>
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_action_remove"
+            android:background="@android:color/transparent"
+            android:onClick="onDrawerLogoutClick" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/login"
+        style="@style/DrawerItem"
+        android:text="Log in"
+        android:drawableLeft="@drawable/ic_action_user"
+        android:onClick="onDrawerLoginClick"/>
+
+    <Button
+        android:id="@+id/manageSubreddits"
+        style="@style/DrawerItem"
+        android:drawableLeft="@drawable/ic_action_collection"
+        android:text="Manage subreddits"
+        android:onClick="onDrawerManageSubredditsClick"/>
+
+</LinearLayout>
