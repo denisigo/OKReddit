@@ -128,7 +128,7 @@ public class ImgUtils {
      */
     private static Bitmap getCachedBitmap(Context context, String filename){
         File file = new File(getCacheDir(context), filename);
-        if (file != null) {
+        if (file != null && file.exists()) {
             return BitmapFactory.decodeFile(file.toString());
         }
 

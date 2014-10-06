@@ -13,6 +13,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -280,7 +281,15 @@ public class ItemFragment extends Fragment implements LoaderManager.LoaderCallba
             float scaleFactor = (float) newWidth / (float) imageWidth;
             int newHeight = (int) (imageHeight * scaleFactor);
 
-            bitmap = Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true);
+            // newWidth or newHeight may be 0 for some reasons.
+            // I suspect it is because mIvThumbnail.getWidth() == 0
+            try {
+                bitmap = Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true);
+            }catch (java.lang.IllegalArgumentException e){
+                e.printStackTrace();
+                mIvThumbnail.setImageResource(R.drawable.reddit_logo_error);
+                return;
+            }
             mIvThumbnail.setImageBitmap(bitmap);
         } else {
             mIvThumbnail.setImageResource(R.drawable.reddit_logo_error);
@@ -294,7 +303,9 @@ public class ItemFragment extends Fragment implements LoaderManager.LoaderCallba
 
         @Override
         protected Bitmap doInBackground(String... strings) {
-            return ImgUtils.getPostThumbnail(getActivity(), strings[0], strings[1], strings[2]);
+            if (getActivity() != null)
+                return ImgUtils.getPostThumbnail(getActivity(), strings[0], strings[1], strings[2]);
+            return null;
         }
 
         @Override

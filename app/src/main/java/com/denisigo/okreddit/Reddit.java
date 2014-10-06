@@ -186,7 +186,7 @@ public class Reddit {
         try {
             String modhash = getModhash();
             //Log.i("aaa", name + " " + direction + " " + modhash);
-            Response vote = mService.vote(modhash, name, direction);
+            Response vote = mService.vote(modhash, direction, name);
             //Log.i("aaa", readRetrofitResponse(vote));
             //Log.i("aaa", "status : " + vote.getStatus());
             result = vote.getStatus() == 200;
